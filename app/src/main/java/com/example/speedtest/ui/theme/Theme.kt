@@ -14,16 +14,11 @@ private val ColorPalette = darkColors(
     onSurface = LightColor2,
     onBackground = LightColor2
 )
-
 @Composable
 fun ComposeSpeedTestTheme(
     content: @Composable () -> Unit
 ) {
-
     MaterialTheme(
-        colors = ColorPalette,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
+        colors = ColorPalette, typography = Typography, shapes = Shapes, content = content
     )
 }

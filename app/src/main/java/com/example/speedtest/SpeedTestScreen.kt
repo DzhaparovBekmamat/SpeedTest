@@ -58,16 +58,13 @@ import kotlinx.coroutines.launch
 import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.roundToInt
-//all ui components is customizable
-//screens of speed
+
 @Composable
 fun SpeedTestScreen() {
     val coroutineScope = rememberCoroutineScope()
-
     val animation = remember { Animatable(0f) }
     val maxSpeed = remember { mutableStateOf(0f) }
     maxSpeed.value = max(maxSpeed.value, animation.value * 100f)
-
     SpeedTestScreen(state = animation.toUiState(maxSpeed.value)) {
         coroutineScope.launch {
             maxSpeed.value = 0f
@@ -75,7 +72,7 @@ fun SpeedTestScreen() {
         }
     }
 }
-//static values for animtations
+
 suspend fun startAnimation(animation: Animatable<Float, AnimationVector1D>) {
     animation.animateTo(0.84f, keyframes {
         durationMillis = 9000
@@ -166,17 +163,14 @@ fun StartButton(isEnabled: Boolean, onClick: () -> Unit) {
         enabled = isEnabled,
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colors.onSurface)
-
     ) {
         Text(text = "START", modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp))
     }
 }
 
-//drawing indication lines
 fun DrawScope.drawLines(progress: Float, maxValue: Float, numberOfLines: Int = 40) {
     val oneRotation = maxValue / numberOfLines
     val startValue = if (progress == 0f) 0 else floor(progress * numberOfLines).toInt() + 1
-
     for (i in startValue..numberOfLines) {
         rotate(i * oneRotation + (180 - maxValue) / 2) {
             drawLine(
@@ -187,18 +181,14 @@ fun DrawScope.drawLines(progress: Float, maxValue: Float, numberOfLines: Int = 4
                 StrokeCap.Round
             )
         }
-
     }
 }
 
-//arcs with nested functions
 fun DrawScope.drawArcs(progress: Float, maxValue: Float) {
     val startAngle = 270 - maxValue / 2
     val sweepAngle = maxValue * progress
-
     val topLeft = Offset(50f, 50f)
     val size = Size(size.width - 100f, size.height - 100f)
-
     fun drawBlur() {
         for (i in 0..20) {
             drawArc(
@@ -225,7 +215,6 @@ fun DrawScope.drawArcs(progress: Float, maxValue: Float) {
         )
     }
 
-    //gradient color giving new view o arc
     fun drawGradient() {
         drawArc(
             brush = GreenGradient,
@@ -237,13 +226,10 @@ fun DrawScope.drawArcs(progress: Float, maxValue: Float) {
             style = Stroke(width = 80f, cap = StrokeCap.Round)
         )
     }
-
-    //init functions
     drawBlur()
     drawStroke()
     drawGradient()
 }
-
 
 @Composable
 fun NavigationView() {
@@ -254,7 +240,6 @@ fun NavigationView() {
         R.drawable.settings,
     )
     val selectedItem = 2
-
     BottomNavigation(backgroundColor = DarkColor) {
         items.mapIndexed { index, item ->
             BottomNavigationItem(
@@ -271,7 +256,6 @@ fun NavigationView() {
 
 @Composable
 fun AdditionalInfo(ping: String, maxSpeed: String) {
-
     @Composable
     fun RowScope.InfoColumn(title: String, value: String) {
         Column(
@@ -284,10 +268,8 @@ fun AdditionalInfo(ping: String, maxSpeed: String) {
                 style = MaterialTheme.typography.body2,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
-
         }
     }
-
     Row(
         Modifier
             .fillMaxWidth()
@@ -318,7 +300,6 @@ fun Header() {
     )
 }
 
-//preview of composable views
 @Preview(showBackground = true)
 @Composable
 fun SpeedTestScreenPreview() {
@@ -332,8 +313,27 @@ fun SpeedTestScreenPreview() {
                     arcValue = 0.25f
                 )
             ) {
-
             }
         }
     }
 }
+/*
+Этот код представляет собой приложение для тестирования скорости интернета на платформе Android, используя Compose, который позволяет создавать пользовательские интерфейсы в Kotlin.
+1. `SpeedTestScreen()`: Это основная функция, отвечающая за отображение экрана тестирования скорости.
+Она содержит различные элементы интерфейса, такие как индикатор скорости, кнопка "START", и информация о пинге и максимальной скорости.
+2. `startAnimation(animation: Animatable<Float, AnimationVector1D>)`: Эта функция запускает анимацию, которая изменяет значение скорости в течение некоторого времени.
+3. `toUiState(maxSpeed: Float)`: Эта функция преобразует текущее значение скорости и максимальной скорости в
+объект `UiState`, который представляет текущее состояние интерфейса.
+4. `CircularSpeedIndicator()`: Эта функция рисует круговой индикатор скорости на экране.
+5. `SpeedValue()`: Эта функция отображает значение скорости в текстовом формате.
+6. `StartButton()`: Эта функция отображает кнопку "START", которая запускает тестирование скорости.
+7. `drawLines()` и `drawArcs()`: Эти функции используются для рисования линий и дуг, которые представляют
+собой визуальные элементы индикатора скорости.
+8. `NavigationView()`: Эта функция отображает нижнюю навигационную панель с иконками.
+9. `AdditionalInfo()`: Эта функция показывает дополнительную информацию о пинге и максимальной скорости.
+10. `VerticalDivider()`: Эта функция рисует вертикальную линию для разделения информации о пинге и максимальной скорости.
+11. `Header()`: Эта функция отображает заголовок "SPEEDTEST".
+12. `@Preview`: Это аннотация, которая позволяет предварительно просматривать интерфейс в среде разработки.
+Этот код в целом создает интерфейс для приложения тестирования скорости с различными элементами,
+позволяя пользователю запустить тест и отображая текущую скорость, пинг и максимальную скорость.
+ */
